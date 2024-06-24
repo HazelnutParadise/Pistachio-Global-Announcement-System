@@ -12,9 +12,10 @@ class HeadInjector {
           top: 0 !important;
           left: 0 !important;
           width: 100% !important;
-          background: yellow !important;
-          color: black !important;
+          background: ${BANNER_BACKGROUND_COLOR} !important;
+          color: ${BANNER_TEXT_COLOR} !important;
           display: flex;
+          font-size: 17px !important;
           text-align: center;
           align-items: center;
           justify-content: center;
