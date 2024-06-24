@@ -22,6 +22,13 @@ class HeadInjector {
           padding: 10px !important;
           z-index: 10000 !important;
         }
+        #global-banner a {
+          color: blue !important;
+          text-decoration: underline !important;
+        }
+        #global-banner a:hover {
+          color: DeepSkyBlue !important;
+        }
       </style>
       <script>
         document.addEventListener('DOMContentLoaded', function() {
