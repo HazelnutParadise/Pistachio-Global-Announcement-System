@@ -34,6 +34,11 @@ class HeadInjector {
     const scriptHTML = `
       <script>
         document.addEventListener('DOMContentLoaded', function() {
+          if (window.self !== window.top) {
+            // 如果在 iframe 中，不插入橫幅
+            return;
+          }
+          
           var banner = document.createElement('div');
           banner.id = 'global-banner';
           banner.innerHTML = bannerContent;
@@ -65,6 +70,13 @@ class HeadInjector {
 async function handleRequest(request) {
   // 只處理 GET 請求
   if (request.method !== 'GET') {
+    return fetch(request);
+  }
+
+  // 檢查 User-Agent 是否不為空，且不是 AJAX 請求
+  const userAgent = request.headers.get('User-Agent') || '';
+  const xRequestedWith = request.headers.get('X-Requested-With') || '';
+  if (!userAgent || xRequestedWith === 'XMLHttpRequest') {
     return fetch(request);
   }
 
