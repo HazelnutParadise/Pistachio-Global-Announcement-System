@@ -12,7 +12,6 @@ class HeadInjector {
           top: 0 !important;
           left: 0 !important;
           width: 100% !important;
-          height: 45px !important;
           background: yellow !important;
           color: black !important;
           display: flex;
@@ -21,6 +20,7 @@ class HeadInjector {
           justify-content: center;
           padding: 10px !important;
           z-index: 10000 !important;
+          box-sizing: border-box !important;
         }
         #global-banner a {
           color: blue !important;
