@@ -4,8 +4,8 @@ addEventListener('fetch', event => {
 
 class HeadInjector {
   element(element) {
-    // 插入样式和脚本，用于动态插入横幅并为横幅腾出空间
-    const scriptHTML = `
+    // 插入樣式和腳本，用於動態插入橫幅並為橫幅騰出空間
+    const styleHTML = `
       <style>
         #global-banner {
           position: fixed !important;
@@ -29,50 +29,57 @@ class HeadInjector {
         #global-banner a:hover {
           color: DeepSkyBlue !important;
         }
-      </style>
+      </style>`;
+
+    const scriptHTML = `
       <script>
         document.addEventListener('DOMContentLoaded', function() {
           var banner = document.createElement('div');
           banner.id = 'global-banner';
-          banner.innerHTML = '<strong>開心果全站廣播系統測試橫幅</strong>';
+          banner.innerHTML = bannerContent;
           document.body.appendChild(banner);
 
-          // 动态调整页面内容上边距
+          // 動態調整頁面內容上邊距
           function adjustBodyMargin() {
             var bannerHeight = banner.offsetHeight;
             document.body.style.marginTop = bannerHeight + 'px';
           }
 
-          // 在横幅插入之后立即调整一次
+          // 在橫幅插入之後立即調整一次
           adjustBodyMargin();
 
-          // 监听窗口大小变化并重新调整
+          // 監聽窗口大小變化並重新調整
           window.addEventListener('resize', adjustBodyMargin);
         });
-      </script>`
-    // 在 <head> 结束标签之前插入脚本和样式
-    element.append(scriptHTML, { html: true })
+      </script>
+      <script>
+        const bannerContent = '<strong>${BANNER_TEXT}<a href="${LINK_URL}" target="_blank">${LINK_TEXT}</a></strong>';
+      </script>`;
+
+    // 在 <head> 結束標籤之前插入樣式和腳本
+    element.append(styleHTML, { html: true });
+    element.append(scriptHTML, { html: true });
   }
 }
 
 async function handleRequest(request) {
-  // 只处理 GET 请求
+  // 只處理 GET 請求
   if (request.method !== 'GET') {
-    return fetch(request)
+    return fetch(request);
   }
 
-  // 直接转发请求给原始服务器
-  const response = await fetch(request)
+  // 直接轉發請求給原始伺服器
+  const response = await fetch(request);
 
-  // 检查响应的 Content-Type，确保只处理 HTML 响应
-  const contentType = response.headers.get('content-type') || ''
+  // 檢查回應的 Content-Type，確保只處理 HTML 回應
+  const contentType = response.headers.get('content-type') || '';
   if (contentType.includes('html')) {
     // 使用 HTMLRewriter 修改 HTML
     return new HTMLRewriter()
       .on('head', new HeadInjector())
-      .transform(response)
+      .transform(response);
   }
 
-  // 对非 HTML 响应不做处理
-  return response
+  // 對非 HTML 回應不做處理
+  return response;
 }
