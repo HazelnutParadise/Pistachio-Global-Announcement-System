@@ -46,7 +46,7 @@ class HeadInjector {
             return;
           }
 
-          // 添加或移除查询参数 banner=uuid
+          // 检查并修改 URL 以添加或移除查询参数 banner
           const url = new URL(window.location.href);
           if ('${ACTIVE}' === 'true') {
             url.searchParams.set('banner', generateUUID());
