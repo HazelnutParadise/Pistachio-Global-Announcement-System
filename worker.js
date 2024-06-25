@@ -46,14 +46,12 @@ class HeadInjector {
             return;
           }
 
-          // 检查并修改 URL 以添加或移除查询参数 banner
-          const url = new URL(window.location.href);
+          // 添加查询参数 banner=uuid
           if ('${ACTIVE}' === 'true') {
+            const url = new URL(window.location.href);
             url.searchParams.set('banner', generateUUID());
-          } else {
-            url.searchParams.delete('banner');
+            window.history.replaceState({}, '', url.toString());
           }
-          window.history.replaceState({}, '', url.toString());
 
           var banner = document.createElement('div');
           banner.id = 'global-banner';
@@ -116,8 +114,9 @@ async function handleRequest(request) {
   let url = new URL(request.url);
   if (ACTIVE === 'true') {
     url.searchParams.set('banner', generateUUID());
-  } else {
+  } else if (url.searchParams.has('banner')) {
     url.searchParams.delete('banner');
+    return Response.redirect(url.toString(), 301); // 重定向到移除 banner 参数的 URL
   }
 
   // 创建修改后的请求
