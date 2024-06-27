@@ -33,8 +33,23 @@ class HeadInjector {
         #close-banner {
           position: absolute !important;
           right: 10px !important;
-          top: 10px !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
           cursor: pointer !important;
+        }
+        #banner-content {
+          display: flex !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+          width: 100% !important;
+          padding-top: 0px !important;
+          padding-bottom: 0px !important;
+          padding-left: 10px !important;
+          padding-right: 25px !important;
+        }
+        #banner-text {
+          flex-grow: 1 !important;
+          text-align: center !important;
         }
       </style>`;
 
@@ -55,7 +70,7 @@ class HeadInjector {
 
           var banner = document.createElement('div');
           banner.id = 'global-banner';
-          banner.innerHTML = bannerContent;
+          banner.innerHTML = '<div id="banner-content"><span id="banner-text"><strong>${BANNER_TEXT}<a href="${LINK_URL}" target="_blank">${LINK_TEXT}</a></strong></span><span id="close-banner">✖</span></div>';
           document.body.appendChild(banner);
 
           // 动态调整页面内容上边距
@@ -86,9 +101,6 @@ class HeadInjector {
           });
           return \`\${timestamp}-\${template}\`;
         }
-      </script>
-      <script>
-        const bannerContent = '<strong>${BANNER_TEXT}<a href="${LINK_URL}" target="_blank">${LINK_TEXT}</a></strong><span id="close-banner">✖</span>';
       </script>`;
 
     // 在 <head> 结束标签之前插入样式和脚本
