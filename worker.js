@@ -20,7 +20,7 @@ class HeadInjector {
           align-items: center;
           justify-content: center;
           padding: 10px !important;
-          z-index: 10000 !important;
+          z-index: 2147483647 !important;
           box-sizing: border-box !important;
         }
         #global-banner a {
@@ -51,6 +51,11 @@ class HeadInjector {
           flex-grow: 1 !important;
           text-align: center !important;
         }
+        body.has-banner .fixed-top,
+        body.has-banner [style*="position: fixed"][style*="top:"],
+        body.has-banner [style*="position:fixed"][style*="top:"] {
+          margin-top: var(--banner-height) !important;
+        }
       </style>`;
 
     const scriptHTML = `
@@ -73,22 +78,26 @@ class HeadInjector {
           banner.innerHTML = '<div id="banner-content"><span id="banner-text"><strong>${BANNER_TEXT}<a href="${LINK_URL}" target="_blank">${LINK_TEXT}</a></strong></span><span id="close-banner">✖</span></div>';
           document.body.appendChild(banner);
 
-          // 动态调整页面内容上边距
-          function adjustBodyMargin() {
+          // 动态调整页面内容和固定定位元素
+          function adjustLayout() {
             var bannerHeight = banner.offsetHeight;
+            document.documentElement.style.setProperty('--banner-height', bannerHeight + 'px');
             document.body.style.marginTop = bannerHeight + 'px';
+            document.body.classList.add('has-banner');
           }
 
           // 在横幅插入之后立即调整一次
-          adjustBodyMargin();
+          adjustLayout();
 
           // 监听窗口大小变化并重新调整
-          window.addEventListener('resize', adjustBodyMargin);
+          window.addEventListener('resize', adjustLayout);
 
-          // 关闭横幅
+          // 关闭横幅时移除所有调整
           document.getElementById('close-banner').addEventListener('click', function() {
             banner.style.display = 'none';
             document.body.style.marginTop = '0px';
+            document.body.classList.remove('has-banner');
+            document.documentElement.style.removeProperty('--banner-height');
           });
         });
 
