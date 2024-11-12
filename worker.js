@@ -7,7 +7,7 @@ class HeadInjector {
     // 插入样式和脚本，用于动态插入横幅并为横幅腾出空间
     const styleHTML = `
       <style>
-        #global-banner {
+        #Pistachio-Announcement＿global-banner {
           width: 100% !important;
           background: ${BANNER_BACKGROUND_COLOR} !important;
           color: ${BANNER_TEXT_COLOR} !important;
@@ -20,17 +20,17 @@ class HeadInjector {
           box-sizing: border-box !important;
           position: relative !important;
         }
-        #global-banner.fixed-banner {
+        #Pistachio-Announcement＿global-banner.fixed-banner {
           position: fixed !important;
           top: 0 !important;
           left: 0 !important;
           z-index: 2147483647 !important;
         }
-        #global-banner a {
+        #Pistachio-Announcement＿global-banner a {
           color: blue !important;
           text-decoration: underline !important;
         }
-        #global-banner a:hover {
+        #Pistachio-Announcement＿global-banner a:hover {
           color: DeepSkyBlue !important;
         }
         #close-banner {
@@ -77,7 +77,7 @@ class HeadInjector {
 
           const existingAnnouncement = document.getElementById('Pistachio-Announcement');
           var banner = document.createElement('div');
-          banner.id = 'global-banner';
+          banner.id = 'Pistachio-Announcement＿global-banner';
           banner.innerHTML = '<div id="banner-content"><span id="banner-text"><strong>${BANNER_TEXT}<a href="${LINK_URL}" target="_blank">${LINK_TEXT}</a></strong></span></div><span id="close-banner">✖</span>';
           
           if (existingAnnouncement) {
