@@ -8,9 +8,6 @@ class HeadInjector {
     const styleHTML = `
       <style>
         #global-banner {
-          position: fixed !important;
-          top: 0 !important;
-          left: 0 !important;
           width: 100% !important;
           background: ${BANNER_BACKGROUND_COLOR} !important;
           color: ${BANNER_TEXT_COLOR} !important;
@@ -20,8 +17,14 @@ class HeadInjector {
           align-items: center;
           justify-content: center;
           padding: 10px !important;
-          z-index: 2147483647 !important;
           box-sizing: border-box !important;
+          position: relative !important;
+        }
+        #global-banner.fixed-banner {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          z-index: 2147483647 !important;
         }
         #global-banner a {
           color: blue !important;
@@ -36,16 +39,15 @@ class HeadInjector {
           top: 50% !important;
           transform: translateY(-50%) !important;
           cursor: pointer !important;
+          line-height: 1 !important;
+          padding: 5px !important;
         }
         #banner-content {
           display: flex !important;
-          justify-content: space-between !important;
+          justify-content: center !important;
           align-items: center !important;
           width: 100% !important;
-          padding-top: 0px !important;
-          padding-bottom: 0px !important;
-          padding-left: 10px !important;
-          padding-right: 25px !important;
+          padding: 0 35px !important;
         }
         #banner-text {
           flex-grow: 1 !important;
@@ -73,12 +75,28 @@ class HeadInjector {
             window.history.replaceState({}, '', url.toString());
           }
 
+          const existingAnnouncement = document.getElementById('Pistachio-Announcement');
           var banner = document.createElement('div');
           banner.id = 'global-banner';
-          banner.innerHTML = '<div id="banner-content"><span id="banner-text"><strong>${BANNER_TEXT}<a href="${LINK_URL}" target="_blank">${LINK_TEXT}</a></strong></span><span id="close-banner">✖</span></div>';
-          document.body.appendChild(banner);
+          banner.innerHTML = '<div id="banner-content"><span id="banner-text"><strong>${BANNER_TEXT}<a href="${LINK_URL}" target="_blank">${LINK_TEXT}</a></strong></span></div><span id="close-banner">✖</span>';
+          
+          if (existingAnnouncement) {
+            // 如果存在 Pistachio-Announcement，直接插入其中
+            existingAnnouncement.appendChild(banner);
+          } else {
+            // 否則按原來的方式處理
+            banner.classList.add('fixed-banner');
+            document.body.appendChild(banner);
+            adjustLayout();
+          }
 
-          // 动态调整页面内容和固定定位元素
+          // 滾動到頂部
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+
+          // 動態調整頁面內容和固定定位元素
           function adjustLayout() {
             var bannerHeight = banner.offsetHeight;
             document.documentElement.style.setProperty('--banner-height', bannerHeight + 'px');
@@ -86,18 +104,19 @@ class HeadInjector {
             document.body.classList.add('has-banner');
           }
 
-          // 在横幅插入之后立即调整一次
-          adjustLayout();
+          // 只在沒有 Pistachio-Announcement 時監聽窗口大小變化
+          if (!existingAnnouncement) {
+            window.addEventListener('resize', adjustLayout);
+          }
 
-          // 监听窗口大小变化并重新调整
-          window.addEventListener('resize', adjustLayout);
-
-          // 关闭横幅时移除所有调整
+          // 關閉橫幅時的處理
           document.getElementById('close-banner').addEventListener('click', function() {
             banner.style.display = 'none';
-            document.body.style.marginTop = '0px';
-            document.body.classList.remove('has-banner');
-            document.documentElement.style.removeProperty('--banner-height');
+            if (!existingAnnouncement) {
+              document.body.style.marginTop = '0px';
+              document.body.classList.remove('has-banner');
+              document.documentElement.style.removeProperty('--banner-height');
+            }
           });
         });
 
