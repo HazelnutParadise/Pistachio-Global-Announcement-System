@@ -142,6 +142,10 @@ async function handleRequest(request) {
   if (request.method !== 'GET') {
     return fetch(request);
   }
+  if (url.pathname.startsWith('/ghost/')) {
+    // 略過 Ghost 的管理員頁面
+    return fetch(request);
+  }
 
   // 检查 User-Agent 是否不为空，且不是 AJAX 请求
   const userAgent = request.headers.get('User-Agent') || '';
