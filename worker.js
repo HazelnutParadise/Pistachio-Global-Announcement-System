@@ -142,6 +142,7 @@ async function handleRequest(request) {
   if (request.method !== 'GET') {
     return fetch(request);
   }
+  const url = new URL(request.url);
   if (url.pathname.startsWith('/ghost/')) {
     // 略過 Ghost 的管理員頁面
     return fetch(request);
@@ -154,8 +155,6 @@ async function handleRequest(request) {
     return fetch(request);
   }
 
-  // 修改 URL 以添加或移除查询参数 banner
-  let url = new URL(request.url);
   if (ACTIVE === 'true') {
     url.searchParams.set('banner', generateUUID());
   } else if (url.searchParams.has('banner')) {
