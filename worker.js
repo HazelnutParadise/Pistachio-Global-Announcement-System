@@ -4,7 +4,7 @@ addEventListener('fetch', event => {
 
 class HeadInjector {
   element(element) {
-    // 插入样式和脚本，用于动态插入横幅并为横幅腾出空间
+    // 插入樣式和腳本，用於動態插入橫幅並為橫幅騰出空間
     const styleHTML = `
       <style>
         #Pistachio-Announcement＿global-banner {
@@ -66,11 +66,11 @@ class HeadInjector {
       <script>
         document.addEventListener('DOMContentLoaded', function() {
           if (window.self !== window.top) {
-            // 如果在 iframe 中，不插入横幅
+            // 如果在 iframe 中，不插入橫幅
             return;
           }
 
-          // 添加查询参数 banner=uuid
+          // 添加查詢參數 banner=uuid
           if ('${ACTIVE}' === 'true') {
             const url = new URL(window.location.href);
             url.searchParams.set('banner', generateUUID());
@@ -133,14 +133,14 @@ class HeadInjector {
         }
       </script>`;
 
-    // 在 <head> 结束标签之前插入样式和脚本
+    // 在 <head> 結束標籤之前插入樣式和腳本
     element.append(styleHTML, { html: true });
     element.append(scriptHTML, { html: true });
   }
 }
 
 async function handleRequest(request) {
-  // 只处理 GET 请求
+  // 只處理 GET 請求
   if (request.method !== 'GET') {
     return fetch(request);
   }
@@ -150,7 +150,7 @@ async function handleRequest(request) {
     return fetch(request);
   }
 
-  // 检查 User-Agent 是否不为空，且不是 AJAX 请求
+  // 檢查 User-Agent 是否不為空，且不是 AJAX 請求
   const userAgent = request.headers.get('User-Agent') || '';
   const xRequestedWith = request.headers.get('X-Requested-With') || '';
   if (!userAgent || xRequestedWith === 'XMLHttpRequest') {
@@ -161,17 +161,17 @@ async function handleRequest(request) {
     url.searchParams.set('banner', generateUUID());
   } else if (url.searchParams.has('banner')) {
     url.searchParams.delete('banner');
-    return Response.redirect(url.toString(), 301); // 重定向到移除 banner 参数的 URL
+    return Response.redirect(url.toString(), 301); // 重定向到移除 banner 參數的 URL
   }
 
-  // 创建修改后的请求
+  // 創建修改後的請求
   const modifiedRequest = new Request(url.toString(), request);
   let response = await fetch(modifiedRequest);
 
-  // 检查响应的 Content-Type，确保只处理 HTML 响应
+  // 檢查響應的 Content-Type，確保只處理 HTML 響應
   const contentType = response.headers.get('content-type') || '';
   if (contentType.includes('html')) {
-    // 仅在 ACTIVE 为 'true' 时插入横幅并禁用缓存
+    // 僅在 ACTIVE 為 'true' 時插入橫幅並禁用緩存
     if (ACTIVE === 'true') {
       let modifiedResponse = new HTMLRewriter()
         .on('head', new HeadInjector())
@@ -185,7 +185,7 @@ async function handleRequest(request) {
 
       return newResponse;
     } else {
-      // 对于 ACTIVE 不为 'true' 的情况，禁用浏览器缓存，但允许 Cloudflare 缓存
+      // 對於 ACTIVE 不為 'true' 的情況，禁用瀏覽器緩存，但允許 Cloudflare 緩存
       let newResponse = new Response(response.body, response);
       newResponse.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate');
       newResponse.headers.set('Pragma', 'no-cache');
@@ -194,11 +194,11 @@ async function handleRequest(request) {
     }
   }
 
-  // 对非 HTML 响应不做处理
+  // 對非 HTML 響應不做處理
   return response;
 }
 
-// 生成包含当前时间的 UUID
+// 生成包含當前時間的 UUID
 function generateUUID() {
   const timestamp = Date.now().toString(16);
   const template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
