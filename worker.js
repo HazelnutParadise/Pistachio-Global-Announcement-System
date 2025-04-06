@@ -80,7 +80,7 @@ class HeadInjector {
           const existingAnnouncement = document.getElementById('Pistachio-Announcement');
           var banner = document.createElement('div');
           banner.id = 'Pistachio-Announcement＿global-banner';
-          banner.innerHTML = '<div id="banner-content"><span id="banner-text">【榛果繽紛樂 開心果全站廣播📢】<strong>${BANNER_TEXT} <a href="${LINK_URL}" target="_blank">${LINK_TEXT}</a></strong></span></div><span id="close-banner">✖</span>';
+          banner.innerHTML = '<div id="banner-content"><span id="banner-text">〔榛果繽紛樂 開心果全站廣播📢〕<strong>${BANNER_TEXT} <a href="${LINK_URL}" target="_blank">${LINK_TEXT}</a></strong></span></div><span id="close-banner">✖</span>';
           
           if (existingAnnouncement) {
             // 如果存在 Pistachio-Announcement，直接插入其中
