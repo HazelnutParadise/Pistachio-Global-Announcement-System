@@ -78,19 +78,25 @@ class HeadInjector {
           }
 
           const existingAnnouncement = document.getElementById('Pistachio-Announcement');
-          var banner = document.createElement('div');
-          banner.id = 'Pistachio-Announcement＿global-banner';
-          banner.innerHTML = '<div id="banner-content"><span id="banner-text">〔榛果繽紛樂 開心果全站廣播📢〕<strong>${BANNER_TEXT} <a href="${LINK_URL}" target="_blank">${LINK_TEXT}</a></strong></span></div><span id="close-banner">✖</span>';
-          
-          if (existingAnnouncement) {
-            // 如果存在 Pistachio-Announcement，直接插入其中
-            existingAnnouncement.appendChild(banner);
-          } else {
-            // 否則按原來的方式處理
-            banner.classList.add('fixed-banner');
-            document.body.appendChild(banner);
-            adjustLayout();
-          }
+
+            // 檢查是否已存在橫幅，避免重複插入
+            if (document.getElementById('Pistachio-Announcement＿global-banner')) {
+              // 已存在橫幅，直接返回不再插入
+              return;
+            }
+            var banner = document.createElement('div');
+            banner.id = 'Pistachio-Announcement＿global-banner';
+            banner.innerHTML = '<div id="banner-content"><span id="banner-text">〔榛果繽紛樂 開心果全站廣播📢〕<strong>${BANNER_TEXT} <a href="${LINK_URL}" target="_blank">${LINK_TEXT}</a></strong></span></div><span id="close-banner">✖</span>';
+
+            if (existingAnnouncement) {
+              // 如果存在 Pistachio-Announcement，直接插入其中
+              existingAnnouncement.appendChild(banner);
+            } else {
+              // 否則按原來的方式處理
+              banner.classList.add('fixed-banner');
+              document.body.appendChild(banner);
+              adjustLayout();
+            }
 
           // 滾動到頂部
           window.scrollTo({
@@ -201,7 +207,7 @@ async function handleRequest(request) {
 // 生成包含當前時間的 UUID
 function generateUUID() {
   const timestamp = Date.now().toString(16);
-  const template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  const template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = (Math.random() * 16) | 0,
       v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
